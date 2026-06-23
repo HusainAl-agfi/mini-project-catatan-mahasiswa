@@ -4,137 +4,347 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Catatan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            line-height: 1.6; 
-            margin: 30px; 
-            background-color: #f4f6f9; 
-            color: #333; 
+        *, *::before, *::after { box-sizing: border-box; }
+
+        :root {
+            --primary:        #4f46e5;
+            --primary-hover:  #4338ca;
+            --primary-soft:   #eef2ff;
+            --success:        #059669;
+            --success-hover:  #047857;
+            --success-soft:   #ecfdf5;
+            --bg:             #f1f5f9;
+            --surface:        #ffffff;
+            --surface-2:      #f8fafc;
+            --text-primary:   #0f172a;
+            --text-secondary: #475569;
+            --text-muted:     #94a3b8;
+            --border:         #e2e8f0;
+            --border-strong:  #cbd5e1;
+            --border-focus:   #4f46e5;
+            --danger:         #dc2626;
+            --shadow-md:      0 4px 20px rgba(15,23,42,.08), 0 1px 4px rgba(15,23,42,.04);
+            --radius-sm:      6px;
+            --radius-md:      10px;
+            --radius-lg:      16px;
+            --ring-primary:   0 0 0 3px rgba(79,70,229,.22);
+            --ring-success:   0 0 0 3px rgba(5,150,105,.22);
+            --transition:     all 0.2s cubic-bezier(0.4,0,0.2,1);
         }
-        .container { 
-            max-width: 500px; 
-            margin: 50px auto; 
-            background: white; 
-            padding: 30px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            line-height: 1.65;
+            margin: 0;
+            min-height: 100vh;
+            padding: 48px 20px 64px;
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 70% 15%, rgba(5,150,105,.06) 0%, transparent 50%);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
         }
-        h1 { 
-            color: #2c3e50; 
-            margin-top: 0; 
-            margin-bottom: 25px; 
-            border-bottom: 2px solid #f1f1f1; 
-            padding-bottom: 10px; 
-            font-size: 1.8rem;
+
+        /* ── Page wrapper ────────────────────────────── */
+        .page-wrapper {
+            max-width: 560px;
+            margin: 0 auto;
         }
-        .form-group { 
-            margin-bottom: 20px; 
+
+        /* ── Back link ───────────────────────────────── */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+            transition: var(--transition);
         }
-        .form-control { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-            box-sizing: border-box; 
-            font-size: 1rem; 
+
+        .back-link:hover { color: var(--primary); }
+        .back-link::before { content: '←'; font-size: 1rem; }
+
+        /* ── Card container ──────────────────────────── */
+        .container {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            overflow: hidden;
         }
-        .form-control:focus { 
-            border-color: #3498db; 
-            outline: none; 
+
+        /* ── Card header ─────────────────────────────── */
+        .form-header {
+            padding: 28px 32px 24px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--success-soft) 0%, var(--surface) 60%);
         }
-        textarea.form-control { 
-            resize: vertical; 
-            height: 100px; 
+
+        .form-header-eyebrow {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--success);
+            margin-bottom: 4px;
         }
-        .error-box { 
-            background-color: #f8d7da; 
-            color: #721c24; 
-            padding: 15px; 
-            border-radius: 5px; 
-            margin-bottom: 20px; 
-            border: 1px solid #f5c6cb; 
+
+        h1 {
+            color: var(--text-primary);
+            margin: 0;
+            font-size: 1.45rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
         }
-        .error-box ul { 
-            margin: 0; 
-            padding-left: 20px; 
+
+        /* ── Form progress hint ──────────────────────── */
+        .form-hint {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 6px;
         }
-        .btn-container { 
-            display: flex; 
-            gap: 10px; 
-            margin-top: 25px; 
+
+        /* ── Form body ───────────────────────────────── */
+        .form-body { padding: 28px 32px 32px; }
+
+        .form-group { margin-bottom: 22px; }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
         }
-        .btn-simpan { 
-            background-color: #2ecc71; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 1rem; 
+
+        .required-dot {
+            display: inline-block;
+            width: 5px; height: 5px;
+            background: var(--danger);
+            border-radius: 50%;
+            margin-left: 2px;
+            flex-shrink: 0;
         }
-        .btn-simpan:hover { 
-            background-color: #27ae60; 
+
+        .field-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-weight: 400;
         }
-        .btn-kembali { 
-            background-color: #95a5a6; 
-            color: white; 
-            text-decoration: none; 
-            padding: 10px 20px; 
-            border-radius: 4px; 
-            text-align: center; 
-            font-size: 1rem; 
+
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1.5px solid var(--border-strong);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            background: var(--surface-2);
+            transition: var(--transition);
+            appearance: none;
         }
-        .btn-kembali:hover { 
-            background-color: #7f8c8d; 
+
+        .form-control::placeholder { color: var(--text-muted); }
+
+        .form-control:hover { border-color: #94a3b8; background: var(--surface); }
+
+        .form-control:focus {
+            border-color: var(--success);
+            background: var(--surface);
+            outline: none;
+            box-shadow: var(--ring-success);
+        }
+
+        select.form-control {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 38px;
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 130px;
+            line-height: 1.6;
+        }
+
+        /* ── Error box ───────────────────────────────── */
+        .error-box {
+            display: flex;
+            gap: 12px;
+            background: #fef2f2;
+            color: #b91c1c;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            border: 1px solid #fecaca;
+            font-size: 0.87rem;
+        }
+
+        .error-icon {
+            flex-shrink: 0;
+            width: 20px; height: 20px;
+            background: #dc2626;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+
+        .error-box ul { margin: 0; padding-left: 16px; }
+        .error-box li { margin-bottom: 2px; }
+
+        /* ── Divider ─────────────────────────────────── */
+        .form-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 28px 0;
+        }
+
+        /* ── Action buttons ──────────────────────────── */
+        .btn-container { display: flex; gap: 10px; }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            padding: 11px 22px;
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.92rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            border: 1.5px solid transparent;
+            line-height: 1;
+        }
+
+        .btn:active { transform: scale(0.98); }
+        .btn:focus-visible { outline: none; box-shadow: var(--ring-success); }
+
+        .btn-simpan {
+            background: var(--success);
+            color: #fff;
+            border-color: var(--success);
+            flex: 1;
+            box-shadow: 0 1px 2px rgba(5,150,105,.2), 0 4px 12px rgba(5,150,105,.12);
+        }
+
+        .btn-simpan:hover {
+            background: var(--success-hover);
+            border-color: var(--success-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(5,150,105,.2), 0 8px 20px rgba(5,150,105,.16);
+        }
+
+        .btn-kembali {
+            background: var(--surface-2);
+            color: var(--text-secondary);
+            border-color: var(--border-strong);
+        }
+
+        .btn-kembali:hover {
+            background: var(--border);
+            color: var(--text-primary);
+            border-color: #94a3b8;
+        }
+
+        /* ── Responsive ──────────────────────────────── */
+        @media (max-width: 600px) {
+            body { padding: 28px 16px 48px; }
+            .form-header { padding: 22px 22px 18px; }
+            .form-body { padding: 22px 22px 24px; }
+            .btn-container { flex-direction: column-reverse; }
+            .btn-simpan { flex: unset; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Tambah Catatan</h1>
+<div class="page-wrapper">
+    <a href="/catatan" class="back-link">Kembali ke Daftar</a>
 
-    @if ($errors->any())
-        <div class="error-box">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="/catatan" method="POST">
-        @csrf
-        
-        <div class="form-group">
-            <input type="text" name="judul" class="form-control" placeholder="Judul Catatan" value="{{ old('judul') }}">
+    <div class="container">
+        <div class="form-header">
+            <p class="form-header-eyebrow">Catatan Baru</p>
+            <h1>Tambah Catatan</h1>
+            <p class="form-hint">Semua field bertanda <span style="color:#dc2626;font-weight:600;">•</span> wajib diisi.</p>
         </div>
 
-        <div class="form-group">
-            <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', date('Y-m-d')) }}">
-        </div>
+        <div class="form-body">
+            @if ($errors->any())
+                <div class="error-box">
+                    <div class="error-icon">!</div>
+                    <div>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
 
-        <div class="form-group">
-            <select name="kategori" class="form-control">
-                <option value="">-- Pilih Kategori --</option>
-                <option value="Tugas" {{ old('kategori') == 'Tugas' ? 'selected' : '' }}>Tugas</option>
-                <option value="Ujian" {{ old('kategori') == 'Ujian' ? 'selected' : '' }}>Ujian</option>
-                <option value="Selingan" {{ old('kategori') == 'Selingan' ? 'selected' : '' }}>Selingan</option>
-            </select>
-        </div>
+            <form action="/catatan" method="POST">
+                @csrf
 
-        <div class="form-group">
-            <textarea name="isi" class="form-control" placeholder="Isi catatan (Minimal 10 karakter)">{{ old('isi') }}</textarea>
-        </div>
+                <div class="form-group">
+                    <label for="judul">Judul Catatan <span class="required-dot"></span></label>
+                    <input type="text" id="judul" name="judul" class="form-control"
+                           placeholder="Contoh: Resume Materi Pemrograman Web..."
+                           value="{{ old('judul') }}">
+                </div>
 
-        <div class="btn-container">
-            <button type="submit" class="btn-simpan">Simpan</button>
-            <a href="/catatan" class="btn-kembali">Batal</a>
+                <div class="form-group">
+                    <label for="tanggal">Tanggal <span class="required-dot"></span></label>
+                    <input type="date" id="tanggal" name="tanggal" class="form-control"
+                           value="{{ old('tanggal', date('Y-m-d')) }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="kategori">Kategori <span class="required-dot"></span></label>
+                    <select id="kategori" name="kategori" class="form-control">
+                        <option value="">— Pilih Kategori —</option>
+                        <option value="Tugas" {{ old('kategori') == 'Tugas' ? 'selected' : '' }}>Tugas</option>
+                        <option value="Ujian" {{ old('kategori') == 'Ujian' ? 'selected' : '' }}>Ujian</option>
+                        <option value="Selingan" {{ old('kategori') == 'Selingan' ? 'selected' : '' }}>Selingan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="isi">Isi Catatan <span class="required-dot"></span></label>
+                    <textarea id="isi" name="isi" class="form-control"
+                              placeholder="Tulis catatan Anda di sini...">{{ old('isi') }}</textarea>
+                    <p class="field-hint">Minimal 10 karakter.</p>
+                </div>
+
+                <div class="form-divider"></div>
+
+                <div class="btn-container">
+                    <button type="submit" class="btn btn-simpan">✓ Simpan Catatan</button>
+                    <a href="/catatan" class="btn btn-kembali">Batal</a>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
 </body>
